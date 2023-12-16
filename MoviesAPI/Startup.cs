@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
@@ -17,6 +18,8 @@ public class Startup {
         services.AddSwaggerGen(s => {
             s.SwaggerDoc("v1", new OpenApiInfo { Title = "Movies Web API", Version = "v1" });
         });
+
+        services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
