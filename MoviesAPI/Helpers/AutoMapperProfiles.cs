@@ -34,7 +34,7 @@ public class AutoMapperProfiles: Profile {
 
     private List<MoviesActors> MapMoviesActors(MovieCreationDTO movieCreationDTO, Movie movie) {
         var resultado = new List<MoviesActors>();
-        if(movieCreationDTO.Actors is null) 
+        if (movieCreationDTO.Actors is null)
             return resultado;
 
         foreach (var actor in movieCreationDTO.Actors) {
