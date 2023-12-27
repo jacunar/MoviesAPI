@@ -6,4 +6,5 @@ public class Genre {
     [Required]
     [StringLength(50)]
     public string Name { get; set; } = string.Empty;
+    public List<MoviesGenres> MoviesGenres { get; set; } = null!;
 }

@@ -12,7 +12,7 @@ public class FileTypeValidation : ValidationAttribute {
 
     public FileTypeValidation(FileTypeGroup fileTypeGroup) {
         if (fileTypeGroup == FileTypeGroup.Picture)
-            ValidTypes = new string[] { "image/jpeg", "image/png", "image/gif" };
+            ValidTypes = new string[] { "image/jpeg", "image/png", "image/gif", "image/jpg" };
     }
 
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext) {
