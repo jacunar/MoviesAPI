@@ -1,4 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 
 namespace MoviesAPI;
 public class Startup {
@@ -15,13 +17,22 @@ public class Startup {
         services.AddHttpContextAccessor();
 
         services.AddAutoMapper(typeof(Startup));
+        services.AddSingleton<GeometryFactory>(NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326));
+        services.AddSingleton(prov => {
+            new MapperConfiguration(conf => {
+                var geometryFactory = prov.GetRequiredService<GeometryFactory>();
+                conf.AddProfile(new AutoMapperProfiles(geometryFactory));
+            }).CreateMapper()}
+        );
+        
         services.AddControllers().AddNewtonsoftJson();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(s => {
             s.SwaggerDoc("v1", new OpenApiInfo { Title = "Movies Web API", Version = "v1" });
         });
 
-        services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+        services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+            opt => opt.UseNetTopologySuite()));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
