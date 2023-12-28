@@ -5,7 +5,7 @@ using System.Linq.Dynamic.Core;
 namespace MoviesAPI.Controllers;
 [Route("api/movies")]
 [ApiController]
-public class MoviesController : ControllerBase {
+public class MoviesController : CustomBaseController {
     private readonly ApplicationDbContext context;
     private readonly IMapper mapper;
     private readonly IFileStorage fileStorage;
@@ -13,7 +13,7 @@ public class MoviesController : ControllerBase {
     private readonly string container = "favorites";
 
     public MoviesController(ApplicationDbContext context, IMapper mapper, 
-                IFileStorage fileStorage, ILogger<MoviesController> logger) {
+                IFileStorage fileStorage, ILogger<MoviesController> logger): base(context, mapper) {
         this.context = context;
         this.mapper = mapper;
         this.fileStorage = fileStorage;
@@ -137,36 +137,12 @@ public class MoviesController : ControllerBase {
 
     [HttpPatch("{id}")]
     public async Task<ActionResult> Patch(int id, [FromBody] JsonPatchDocument<MoviePatchDTO> patchDocument) {
-        if (patchDocument is null)
-            return BadRequest();
-
-        var entidadDB = await context.Movies.FirstOrDefaultAsync(x => x.Id == id);
-
-        if (entidadDB is null)
-            return NotFound();
-
-        var entidadDTO = mapper.Map<MoviePatchDTO>(entidadDB);
-        patchDocument.ApplyTo(entidadDTO, ModelState);
-
-        var isValid = TryValidateModel(entidadDTO);
-        if (!isValid)
-            return BadRequest(ModelState);
-
-        mapper.Map(entidadDTO, entidadDB);
-        await context.SaveChangesAsync();
-
-        return NoContent();
+        return await Patch<Movie, MoviePatchDTO>(id, patchDocument);
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id) {
-        var existe = await context.Movies.AnyAsync(x => x.Id == id);
-        if (!existe)
-            return NotFound();
-
-        context.Remove(new Movie() { Id = id });
-        await context.SaveChangesAsync();
-        return NoContent();
+        return await Delete<Movie>(id); 
     }
 
     private void AsignActorsOrder(Movie movie) {

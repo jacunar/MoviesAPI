@@ -6,6 +6,9 @@ public class AutoMapperProfiles: Profile {
 		CreateMap<Genre, GenreDTO>().ReverseMap();
         CreateMap<GenreCreationDTO, Genre>();
 
+        CreateMap<Cinema, CinemaDTO>().ReverseMap();
+        CreateMap<CinemaCreationDTO, Cinema>();
+
         CreateMap<Actor, ActorDTO>().ReverseMap();
         CreateMap<ActorCreationDTO, Actor>().
             ForMember(x => x.Picture, o => o.Ignore());

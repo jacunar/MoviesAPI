@@ -9,4 +9,5 @@ public class Movie: IId {
     public string Poster { get; set; } = string.Empty;
     public List<MoviesActors> MoviesActors { get; set; } = null!;
     public List<MoviesGenres> MoviesGenres { get; set; } = null!;
+    public List<MoviesCinemas> MoviesCinemas { get; set; } = null!;
 }
