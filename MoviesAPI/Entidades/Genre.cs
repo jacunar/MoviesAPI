@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace MoviesAPI.Entidades; 
-public class Genre {
+public class Genre: IId {
     public int Id { get; set; }
     [Required]
     [StringLength(50)]

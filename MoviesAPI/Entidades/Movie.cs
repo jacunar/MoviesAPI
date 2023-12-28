@@ -1,5 +1,5 @@
 ﻿namespace MoviesAPI.Entidades; 
-public class Movie {
+public class Movie: IId {
     public int Id { get; set; }
     [Required]
     [StringLength(300)]

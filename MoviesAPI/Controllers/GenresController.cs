@@ -1,32 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MoviesAPI.Controllers;
 [Route("api/genres")]
 [ApiController]
-public class GenresController : ControllerBase {
+public class GenresController : CustomBaseController {
     private readonly ApplicationDbContext dbContext;
     private readonly IMapper mapper;
 
-    public GenresController(ApplicationDbContext dbContext, IMapper mapper) {
+    public GenresController(ApplicationDbContext dbContext, IMapper mapper):
+        base(dbContext, mapper) {
         this.dbContext = dbContext;
         this.mapper = mapper;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<GenreDTO>>> Get() {
-        var entidades = await dbContext.Genres.ToListAsync();
-        var dtos = mapper.Map<List<GenreDTO>>(entidades);
-        return dtos;
+        return await Get<Genre, GenreDTO>();
     }
 
     [HttpGet("{id:int}", Name = "obtenerGenero")]
     public async Task<ActionResult<GenreDTO>> Get(int id) {
-        var entidad = await dbContext.Genres.FirstOrDefaultAsync(x => x.Id == id);
-        if (entidad == null)
-            return NotFound();
-
-        return mapper.Map<GenreDTO>(entidad);
+        return await Get<Genre, GenreDTO>(id);
     }
 
     [HttpPost]

@@ -18,6 +18,39 @@ public class AutoMapperProfiles: Profile {
                 .ForMember(x => x.MoviesActors, opt => opt.MapFrom(MapMoviesActors));
 
         CreateMap<MoviePatchDTO, Movie>().ReverseMap();
+
+        CreateMap<Movie, MovieDetailDTO>()
+                .ForMember(x => x.Genres, opt => opt.MapFrom(MapMoviesGenres))
+                .ForMember(x => x.Actors, opt => opt.MapFrom(MapMoviesActors));
+    }
+
+    private List<ActorMovieDetailDTO> MapMoviesActors(Movie movie, MovieDetailDTO movieDetailDTO) {
+        var result = new List<ActorMovieDetailDTO>();
+
+        if (movie.MoviesActors is null)
+            return result;
+
+        foreach (var item in movie.MoviesActors) {
+            result.Add(new ActorMovieDetailDTO {
+                ActorId = item.ActorId,
+                Character = item.Character,
+                ActorName = item.Actor.Name
+            });
+        }
+
+        return result;
+    }
+
+    private List<GenreDTO> MapMoviesGenres(Movie movie, MovieDetailDTO movieDetailDTO) {
+        var result = new List<GenreDTO>();
+        if (movie.MoviesGenres is null)
+            return result;
+
+        foreach (var item in movie.MoviesGenres) {
+            result.Add(new GenreDTO() { Id = item.GenreId, Name = item.Genre.Name });
+        }
+
+        return result;
     }
 
     private List<MoviesGenres> MapMoviesGenres(MovieCreationDTO movieCreationDTO, Movie movie) {

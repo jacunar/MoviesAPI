@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace MoviesAPI.Entidades; 
-public class Actor {
+public class Actor: IId {
     public int Id { get; set; }
     [Required]
     [StringLength(120)]
