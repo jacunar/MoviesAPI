@@ -8,8 +8,8 @@ public class CinemaDTO {
 
 public class CinemaCreationDTO {
     public string Name { get; set; } = string.Empty;
-    [Range(-80, 80)]
+    [Range(-100, 100)]
     public double Latitude { get; set; }
-    [Range(-120, 120)]
+    [Range(-20, 20)]
     public double Longitude { get; set; }
 }

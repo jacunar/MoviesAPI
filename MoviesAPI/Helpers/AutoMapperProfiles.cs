@@ -1,18 +1,20 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using NetTopologySuite.Geometries;
-
-namespace MoviesAPI.Helpers; 
+﻿namespace MoviesAPI.Helpers; 
 public class AutoMapperProfiles: Profile {
 	public AutoMapperProfiles(GeometryFactory geometryFactory) {
 		CreateMap<Genre, GenreDTO>().ReverseMap();
         CreateMap<GenreCreationDTO, Genre>();
+        CreateMap<IdentityUser, UsuarioDTO>();
 
         CreateMap<Cinema, CinemaDTO>()
             .ForMember(x => x.Latitude, x => x.MapFrom(y => y.Location.Y))
             .ForMember(x => x.Longitude, x => x.MapFrom(y => y.Location.X));
-        CreateMap<CinemaDTO, Cinema>();
+        CreateMap<CinemaDTO, Cinema>()
+            .ForMember(x => x.Location, x => x.MapFrom(y =>
+                    geometryFactory.CreatePoint(new Coordinate(y.Longitude, y.Latitude))));
 
-        CreateMap<CinemaCreationDTO, Cinema>();
+        CreateMap<CinemaCreationDTO, Cinema>()
+                .ForMember(x => x.Location, x => x.MapFrom(y => 
+                    geometryFactory.CreatePoint(new Coordinate(y.Longitude, y.Latitude))));
 
         CreateMap<Actor, ActorDTO>().ReverseMap();
         CreateMap<ActorCreationDTO, Actor>().

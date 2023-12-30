@@ -6,3 +6,5 @@ global using System.ComponentModel.DataAnnotations;
 global using MoviesAPI.Services;
 global using MoviesAPI.Helpers;
 global using MoviesAPI.Validations;
+global using Microsoft.AspNetCore.Identity;
+global using NetTopologySuite.Geometries;
