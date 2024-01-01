@@ -1,4 +1,5 @@
 ﻿namespace MoviesAPI.Validations;
+#nullable disable
 
 public enum FileTypeGroup {
     Picture
@@ -15,7 +16,7 @@ public class FileTypeValidation : ValidationAttribute {
             ValidTypes = new string[] { "image/jpeg", "image/png", "image/gif", "image/jpg" };
     }
 
-    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext) {
+    protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
         if (value == null)
             return ValidationResult.Success;
 

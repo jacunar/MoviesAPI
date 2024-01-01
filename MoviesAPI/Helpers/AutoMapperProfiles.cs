@@ -1,9 +1,17 @@
-﻿namespace MoviesAPI.Helpers; 
+﻿#nullable disable
+
+namespace MoviesAPI.Helpers; 
 public class AutoMapperProfiles: Profile {
 	public AutoMapperProfiles(GeometryFactory geometryFactory) {
 		CreateMap<Genre, GenreDTO>().ReverseMap();
         CreateMap<GenreCreationDTO, Genre>();
         CreateMap<IdentityUser, UsuarioDTO>();
+
+        CreateMap<Review, ReviewDTO>()
+                .ForMember(x => x.UserName, x => x.MapFrom(y => y.Usuario.UserName));
+
+        CreateMap<ReviewDTO, Review>();
+        CreateMap<ReviewCreationDTO, Review>();
 
         CreateMap<Cinema, CinemaDTO>()
             .ForMember(x => x.Latitude, x => x.MapFrom(y => y.Location.Y))

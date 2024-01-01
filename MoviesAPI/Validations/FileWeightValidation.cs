@@ -1,12 +1,14 @@
-﻿namespace MoviesAPI.Validations; 
+﻿namespace MoviesAPI.Validations;
+#nullable disable
+
 public class FileWeightValidation: ValidationAttribute {
     private readonly int megabytesMaxPictureWeight;
 
     public FileWeightValidation(int MegabytesMaxPictureWeight) {
         megabytesMaxPictureWeight = MegabytesMaxPictureWeight;
     }
-    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext) {
-        if (value == null)
+    protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
+        if (value is null)
             return ValidationResult.Success;
 
         IFormFile formFile = value as IFormFile;

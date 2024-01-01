@@ -30,11 +30,17 @@ public class CustomBaseController : ControllerBase {
         return mapper.Map<TDTO>(entity);
     }
 
+    protected async Task<List<TDTO>> Get<TEntidad, TDTO>(PaginationDTO paginacionDTO,
+            IQueryable<TEntidad> queryable)
+            where TEntidad : class {
+        await HttpContext.InsertParameterPagination(queryable, paginacionDTO.RecordsPerPage);
+        var entidades = await queryable.Page(paginacionDTO).ToListAsync();
+        return mapper.Map<List<TDTO>>(entidades);
+    }
+
     protected async Task<List<TDTO>> Get<TEntidad, TDTO>(PaginationDTO paginationDTO) where TEntidad: class {
         var queryable = context.Set<TEntidad>().AsQueryable();
-        await HttpContext.InsertParameterPagination(queryable, paginationDTO.RecordsPerPage);
-        var entities = await queryable.Page(paginationDTO).ToListAsync();
-        return mapper.Map<List<TDTO>>(entities);
+        return await Get<TEntidad, TDTO>(paginationDTO, queryable);
     }
 
     protected async Task<ActionResult> Post<TCreacion, TEntidad, TLectura>(TCreacion creacionDTO, string path) where TEntidad : class, IId {

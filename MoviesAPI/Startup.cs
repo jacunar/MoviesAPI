@@ -28,7 +28,9 @@ public class Startup {
                 conf.AddProfile(new AutoMapperProfiles(geometryFactory));
             }).CreateMapper()
         );
-        
+
+        services.AddScoped<ExistMovieAttribute>();
+
         services.AddControllers().AddNewtonsoftJson();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(s => {

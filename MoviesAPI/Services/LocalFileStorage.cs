@@ -1,5 +1,6 @@
-﻿
-namespace MoviesAPI.Services;
+﻿namespace MoviesAPI.Services;
+#nullable disable
+
 public class LocalFileStorage : IFileStorage {
     private readonly IWebHostEnvironment env;
     private readonly IHttpContextAccessor contextAccessor;

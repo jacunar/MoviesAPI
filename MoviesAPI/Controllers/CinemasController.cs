@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using NetTopologySuite.Geometries;
+
+#nullable disable
 
 namespace MoviesAPI.Controllers; 
 [Route("api/cinemas")]

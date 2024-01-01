@@ -9,6 +9,6 @@ public class NearCinemaFilterDTO {
     public int DistanceInKms {
         get { return distanceInKms; }
 
-        set { distanceInKms = (value > distanceInKms) ? distanceInKms : value; }
+        set { distanceInKms = (value > maxKmsDistance) ? maxKmsDistance : value; }
     }
 }
