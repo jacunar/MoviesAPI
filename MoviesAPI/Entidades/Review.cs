@@ -5,7 +5,7 @@ public class Review: IId {
     [Range(1, 5)]
     public int Puntuacion { get; set; }
     public int MovieId { get; set; }
-    public Movie Movie { get; set; } = null!;
+    public Movie? Movie { get; set; }
     public string UsuarioId { get; set; } = string.Empty;
     public IdentityUser Usuario { get; set; } = null!;
 }

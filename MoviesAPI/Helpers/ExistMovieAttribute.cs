@@ -9,20 +9,17 @@ public class ExistMovieAttribute : Attribute, IAsyncResultFilter {
         this.Dbcontext = context;
     }
     public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next) {
-        var peliculaIdObject = context.HttpContext.Request.RouteValues["peliculaId"] ?? "";
+        var peliculaIdObject = context.HttpContext.Request.RouteValues["movieId"];
 
-        if (peliculaIdObject is null || string.IsNullOrEmpty(peliculaIdObject.ToString()))
+        if (peliculaIdObject == null)
             return;
 
-        string s = peliculaIdObject.ToString() ?? string.Empty;
-        var peliculaId = int.Parse(s);
-
+        var peliculaId = int.Parse(peliculaIdObject.ToString());
         var existePelicula = await Dbcontext.Movies.AnyAsync(x => x.Id == peliculaId);
 
         if (!existePelicula) {
             context.Result = new NotFoundResult();
-        } else {
+        } else 
             await next();
-        }
     }
 }

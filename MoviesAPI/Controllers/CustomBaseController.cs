@@ -86,7 +86,8 @@ public class CustomBaseController : ControllerBase {
 
     protected async Task<ActionResult> Delete<TEntidad>(int id) where TEntidad: class, IId, new() {
         var exist = await context.Set<TEntidad>().AnyAsync(x => x.Id == id);
-        if(!exist) return NoContent();
+        if(!exist) 
+            return NotFound();
 
         context.Remove(new TEntidad() { Id = id });
         await context.SaveChangesAsync();

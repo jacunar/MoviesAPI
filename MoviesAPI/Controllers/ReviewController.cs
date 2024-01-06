@@ -8,7 +8,6 @@ using System.Security.Claims;
 namespace MoviesAPI.Controllers; 
 [Route("api/movies/{movieId:int}/reviews")]
 [ServiceFilter(typeof(ExistMovieAttribute))]
-[ApiController]
 public class ReviewController : CustomBaseController {
     private readonly ApplicationDbContext context;
     private readonly IMapper mapper;
@@ -20,26 +19,26 @@ public class ReviewController : CustomBaseController {
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ReviewDTO>>> Get(int peliculaId,
+    public async Task<ActionResult<List<ReviewDTO>>> Get(int movieId,
             [FromQuery] PaginationDTO paginacionDTO) {
         var queryable = context.Reviews.Include(x => x.Usuario).AsQueryable();
-        queryable = queryable.Where(x => x.MovieId == peliculaId);
+        queryable = queryable.Where(x => x.MovieId == movieId);
         return await Get<Review, ReviewDTO>(paginacionDTO, queryable);
     }
 
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<ActionResult> Post(int peliculaId, [FromBody] ReviewCreationDTO reviewCreacionDTO) {
+    public async Task<ActionResult> Post(int movieId, [FromBody] ReviewCreationDTO reviewCreacionDTO) {
         var usuarioId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
         var reviewExiste = await context.Reviews
-            .AnyAsync(x => x.MovieId == peliculaId && x.UsuarioId == usuarioId);
+            .AnyAsync(x => x.MovieId == movieId && x.UsuarioId == usuarioId);
 
         if (reviewExiste) 
             return BadRequest("El usuario ya ha escrito un review de esta película");
         
         var review = mapper.Map<Review>(reviewCreacionDTO);
-        review.MovieId = peliculaId;
+        review.MovieId = movieId;
         review.UsuarioId = usuarioId;
 
         context.Add(review);
