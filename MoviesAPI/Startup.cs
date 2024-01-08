@@ -31,7 +31,9 @@ public class Startup {
 
         services.AddScoped<ExistMovieAttribute>();
 
-        services.AddControllers().AddNewtonsoftJson();
+        services.AddControllers(options => {
+            options.Filters.Add(typeof(FiltroErrores));
+        }).AddNewtonsoftJson();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(s => {
             s.SwaggerDoc("v1", new OpenApiInfo { Title = "Movies Web API", Version = "v1" });
