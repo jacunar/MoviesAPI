@@ -16,12 +16,11 @@ public class Startup {
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services) {
-        //services.AddTransient<IFileStorage, AzureFileStorage>();
-        services.AddTransient<IFileStorage, LocalFileStorage>();
+        services.AddScoped(Factorias.FileStorageService);
         services.AddHttpContextAccessor();
 
         services.AddAutoMapper(typeof(Startup));
-        services.AddSingleton<GeometryFactory>(NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326));
+        services.AddSingleton(NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326));
         services.AddSingleton(prov => 
             new MapperConfiguration(conf => {
                 var geometryFactory = prov.GetRequiredService<GeometryFactory>();
